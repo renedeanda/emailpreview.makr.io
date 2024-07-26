@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -9,7 +8,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-eval' https://www.googletagmanager.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com;",
+            value: "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self';"
           },
         ],
       },
@@ -17,5 +16,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
-    
+module.exports = nextConfig;

@@ -3,8 +3,27 @@ import './globals.css';
 import Script from 'next/script';
 
 export const metadata = {
-  title: 'HTML Email Preview Tool | Visualize Your Emails Instantly',
-  description: 'Free tool for email marketers and developers to preview HTML emails. Instantly visualize your email designs before sending. Desktop and mobile friendly.',
+  title: "HTML Email Preview Tool - Visualize Your Email Designs Instantly",
+  description: "Free HTML email preview tool. Instantly visualize your email designs before sending. Perfect for email marketers and developers.",
+  keywords: "HTML email, email preview, email testing, email development",
+  openGraph: {
+    title: "HTML Email Preview Tool - Visualize Your Email Designs Instantly",
+    description: "Free HTML email preview tool. Instantly visualize your email designs before sending. Perfect for email marketers and developers.",
+    type: 'website',
+    url: 'https://html-email-previewer.vercel.app',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "HTML Email Preview Tool - Visualize Your Email Designs Instantly",
+    description: "Free HTML email preview tool. Instantly visualize your email designs before sending. Perfect for email marketers and developers.",
+  },
+  icons: [
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      url: '/favicon.svg',
+    },
+  ],
 }
 
 export default function RootLayout({
@@ -38,4 +57,3 @@ export default function RootLayout({
     </html>
   )
 }
-    
