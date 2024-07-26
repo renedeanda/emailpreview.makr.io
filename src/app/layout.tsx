@@ -1,5 +1,5 @@
 
-import '@/styles/globals.css';
+import './globals.css';
 import Script from 'next/script';
 
 export const metadata = {
