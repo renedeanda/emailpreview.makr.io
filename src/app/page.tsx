@@ -23,10 +23,12 @@ export default function Home() {
         const doc = iframe.contentDocument || iframe.contentWindow?.document;
         if (!doc) throw new Error('Unable to access iframe document');
 
-        // Write the new content
-        doc.open();
-        doc.write(htmlInput || '<html><body><div id="preview-content"></div></body></html>');
-        doc.close();
+        // Write the new content only if there's input
+        if (htmlInput.trim()) {
+          doc.open();
+          doc.write(htmlInput);
+          doc.close();
+        }
 
         setError(null);
       } catch (err) {
@@ -59,9 +61,9 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row gap-6 flex-grow">
           <div className="w-full md:w-1/3 flex flex-col">
-            <div className="relative flex-grow">
+            <div className="relative flex-grow flex flex-col h-[calc(100vh-250px)]">
               <textarea
-                className="w-full h-[calc(100vh-250px)] p-4 border-2 border-blue-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white font-mono text-sm"
+                className="w-full flex-grow p-4 border-2 border-blue-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white font-mono text-sm"
                 value={htmlInput}
                 onChange={handleInputChange}
                 placeholder="Paste your HTML email code here..."
@@ -71,7 +73,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="w-full md:w-2/3 border-2 border-purple-300 rounded-lg shadow-sm overflow-hidden bg-white relative">
+          <div className="w-full md:w-2/3 border-2 border-purple-300 rounded-lg shadow-sm overflow-hidden bg-white relative h-[calc(100vh-250px)]">
             <div className="absolute top-0 right-0 bg-purple-500 text-white px-2 py-1 rounded-bl rounded-tr text-xs font-semibold">
               OUTPUT
             </div>
@@ -80,13 +82,19 @@ export default function Home() {
                 <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
                 <span>{error}</span>
               </div>
-            ) : (
+            ) : htmlInput.trim() ? (
               <iframe
                 ref={iframeRef}
-                className="w-full h-[calc(100vh-250px)]"
+                className="w-full h-full"
                 title="HTML Preview"
                 sandbox="allow-scripts allow-same-origin"
               />
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                <Mail className="h-16 w-16 mb-4" />
+                <p className="text-lg text-center">Your email preview will appear here</p>
+                <p className="text-sm text-center mt-2">Paste your HTML email code in the input box to see it rendered</p>
+              </div>
             )}
           </div>
         </div>
