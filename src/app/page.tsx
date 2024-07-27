@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+"use client";
+
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, Mail } from 'lucide-react';
-import DOMPurify from 'dompurify';
+import { AlertTriangle, Code, Eye } from 'lucide-react';
 
 export default function Home() {
   const [htmlInput, setHtmlInput] = useState('');
@@ -28,10 +29,12 @@ export default function Home() {
 
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while rendering the HTML.');
+      setError('Error rendering HTML. Please check your code and try again.');
+      console.error('Rendering error:', err);
     }
   };
 
+  // Initialize iframe content
   useEffect(() => {
     if (iframeRef.current) {
       const iframe = iframeRef.current;
@@ -60,20 +63,27 @@ export default function Home() {
         </h1>
 
         <div className="flex flex-col md:flex-row gap-6 flex-grow">
-          <div className="w-full md:w-1/3 flex flex-col">
-            <div className="relative flex-grow">
+          <div className="flex-1 flex flex-col">
+            <div className="relative flex-grow mb-2"> {/* Changed mb-4 to mb-2 */}
               <textarea
-                className="w-full h-[calc(100vh-250px)] p-4 border-2 border-blue-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white font-mono text-sm"
+                className="w-full h-[calc(100vh-340px)] p-4 border-2 border-blue-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white font-mono text-sm"
                 value={htmlInput}
                 onChange={handleInputChange}
-                placeholder="Paste your HTML email code here..."
+                placeholder="Paste your HTML code here..."
               />
               <div className="absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 rounded-bl rounded-tr text-xs font-semibold">
                 INPUT
               </div>
             </div>
+            <button
+              onClick={updatePreview}
+              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition duration-300 ease-in-out flex items-center justify-center"
+            >
+              <Eye className="mr-2 h-5 w-5" />
+              Generate Preview
+            </button>
           </div>
-          <div className="w-full md:w-2/3 border-2 border-purple-300 rounded-lg shadow-sm overflow-hidden bg-white relative">
+          <div className="flex-1 border-2 border-purple-300 rounded-lg shadow-sm overflow-hidden bg-white relative">
             <div className="absolute top-0 right-0 bg-purple-500 text-white px-2 py-1 rounded-bl rounded-tr text-xs font-semibold">
               OUTPUT
             </div>
@@ -85,16 +95,10 @@ export default function Home() {
             ) : (
               <iframe
                 ref={iframeRef}
-                className="w-full h-[calc(100vh-250px)]"
+                className="w-full h-[calc(100vh-300px)]"
                 title="HTML Preview"
-                sandbox="allow-scripts allow-same-origin allow-popups"
+                sandbox="allow-scripts allow-same-origin"
               />
-            ) : (
-              <div className="h-[calc(100vh-250px)] flex flex-col items-center justify-center text-gray-400">
-                <Mail className="h-16 w-16 mb-4" />
-                <p className="text-lg text-center">Your email preview will appear here</p>
-                <p className="text-sm text-center mt-2">Paste your HTML email code in the input box to see it rendered</p>
-              </div>
             )}
           </div>
         </div>
