@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Mail } from 'lucide-react';
-import DOMPurify from 'dompurify';
 
 export default function Home() {
   const [htmlInput, setHtmlInput] = useState('');
@@ -15,36 +14,33 @@ export default function Home() {
     setError(null);
   };
 
-  const updatePreview = () => {
-    if (!iframeRef.current) return;
-
-    try {
-      const iframe = iframeRef.current;
-      const doc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (!doc) throw new Error('Unable to access iframe document');
-
-      // Write the new content
-      doc.open();
-      doc.write(htmlInput);
-      doc.close();
-
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while rendering the HTML.');
-    }
-  };
-
   useEffect(() => {
-    if (iframeRef.current) {
-      const iframe = iframeRef.current;
-      const doc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (doc) {
+    const updatePreview = () => {
+      if (!iframeRef.current) return;
+
+      try {
+        const iframe = iframeRef.current;
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!doc) throw new Error('Unable to access iframe document');
+
+        // Write the new content
         doc.open();
-        doc.write('<html><body><div id="preview-content"></div></body></html>');
+        doc.write(htmlInput || '<html><body><div id="preview-content"></div></body></html>');
         doc.close();
+
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred while rendering the HTML.');
       }
-    }
-  }, []);
+    };
+
+    // Use requestAnimationFrame to ensure the DOM is ready
+    const timer = requestAnimationFrame(() => {
+      updatePreview();
+    });
+
+    return () => cancelAnimationFrame(timer);
+  }, [htmlInput]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
@@ -84,19 +80,13 @@ export default function Home() {
                 <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
                 <span>{error}</span>
               </div>
-            ) : htmlInput.trim() ? (
+            ) : (
               <iframe
                 ref={iframeRef}
                 className="w-full h-[calc(100vh-250px)]"
                 title="HTML Preview"
-                sandbox="allow-scripts allow-same-origin allow-popups"
+                sandbox="allow-scripts allow-same-origin"
               />
-            ) : (
-              <div className="h-[calc(100vh-250px)] flex flex-col items-center justify-center text-gray-400">
-                <Mail className="h-16 w-16 mb-4" />
-                <p className="text-lg text-center">Your email preview will appear here</p>
-                <p className="text-sm text-center mt-2">Paste your HTML email code in the input box to see it rendered</p>
-              </div>
             )}
           </div>
         </div>
