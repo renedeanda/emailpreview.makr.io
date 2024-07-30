@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { Inter } from 'next/font/google';
-import './globals.css';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
+import './globals.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: "HTML Email Preview Tool - Visualize Your Email Designs Instantly",
