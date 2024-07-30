@@ -1,6 +1,7 @@
 
 import './globals.css';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: "HTML Email Preview Tool - Visualize Your Email Designs Instantly",
@@ -38,9 +39,6 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Iowan+Old+Style&display=swap"
           rel="stylesheet"
         />
-      </head>
-      <body>
-        {children}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"
@@ -53,6 +51,10 @@ export default function RootLayout({
             gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
           `}
         </Script>
+      </head>
+      <body>
+        {children}
+        <Analytics />
       </body>
     </html>
   )
