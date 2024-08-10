@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Mail } from 'lucide-react';
+import useGoogleAnalytics from '../hooks/useGoogleAnalytics';
+import Script from 'next/script';
 
 export default function Home() {
   const [htmlInput, setHtmlInput] = useState('');
