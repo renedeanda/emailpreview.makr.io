@@ -45,6 +45,19 @@ export default function Home() {
   }, [htmlInput]);
 
   return (
+<>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+        `}
+      </Script>
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4">
         <div className="container mx-auto text-center">
@@ -109,5 +122,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+</>
   );
 }
