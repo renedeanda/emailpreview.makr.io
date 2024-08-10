@@ -11,6 +11,9 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // Initialize Google Analytics
+  useGoogleAnalytics();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setHtmlInput(e.target.value);
     setError(null);
