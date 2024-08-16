@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Mail } from 'lucide-react';
