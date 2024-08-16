@@ -3,16 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, Mail } from 'lucide-react';
-import useGoogleAnalytics from '../hooks/useGoogleAnalytics';
-import Script from 'next/script';
 
 export default function Home() {
   const [htmlInput, setHtmlInput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  // Initialize Google Analytics
-  useGoogleAnalytics();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setHtmlInput(e.target.value);
@@ -28,7 +23,6 @@ export default function Home() {
         const doc = iframe.contentDocument || iframe.contentWindow?.document;
         if (!doc) throw new Error('Unable to access iframe document');
 
-        // Write the new content only if there's input
         if (htmlInput.trim()) {
           doc.open();
           doc.write(htmlInput);
@@ -41,7 +35,6 @@ export default function Home() {
       }
     };
 
-    // Use requestAnimationFrame to ensure the DOM is ready
     const timer = requestAnimationFrame(() => {
       updatePreview();
     });
@@ -50,19 +43,6 @@ export default function Home() {
   }, [htmlInput]);
 
   return (
-<>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-        `}
-      </Script>
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4">
         <div className="container mx-auto text-center">
@@ -127,6 +107,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-</>
   );
 }
