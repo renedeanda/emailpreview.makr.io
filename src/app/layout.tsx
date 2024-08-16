@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
@@ -37,6 +36,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link href="https://fonts.googleapis.com/css2?family=Iowan+Old+Style&display=swap" rel="stylesheet" />
+      </head>
+      <body className={inter.className}>
+        {children}
+        <Analytics />
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
@@ -46,13 +49,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+              page_path: window.location.pathname,
+            });
           `}
         </Script>
-      </head>
-      <body className={inter.className}>
-        {children}
-        <Analytics />
       </body>
     </html>
   );
